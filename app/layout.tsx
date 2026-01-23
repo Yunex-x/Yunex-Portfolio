@@ -1,21 +1,32 @@
-import "./globals.css";
 import type { Metadata } from "next";
+import { Playfair_Display, DM_Sans } from "next/font/google";
+import "./globals.css";
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair",
+});
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  variable: "--font-dm-sans",
+});
 
 export const metadata: Metadata = {
-  title: "[YOUR NAME] | Front-End Developer",
-  description: "Portfolio for a front-end developer specializing in React and Next.js",
+  title: "Yunes-x | Front-End Web Developer",
+  description: "I build modern, conversion-focused web interfaces.",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en">
-      <body>
-        <a
-          href="#main"
-          className="absolute left-1/2 -translate-x-1/2 -translate-y-full bg-card text-slate-100 px-4 py-2 rounded-b-lg shadow-soft focus:translate-y-0 transition"
-        >
-          Skip to content
-        </a>
+    <html lang="en" className="scroll-smooth">
+      <body
+        className={`${playfair.variable} ${dmSans.variable} font-sans antialiased`}
+      >
         {children}
       </body>
     </html>
