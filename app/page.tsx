@@ -129,6 +129,19 @@ export default function HeroOptionB() {
     }
   }, [mobileOpen]);
 
+  // close mobile menu when viewport becomes >= sm (640px)
+  useEffect(() => {
+    const onResize = () => {
+      if (window.innerWidth >= 640 && mobileOpen) {
+        setMobileOpen(false);
+      }
+    };
+    window.addEventListener("resize", onResize);
+    // also run once to handle initial mount/responsive testing
+    onResize();
+    return () => window.removeEventListener("resize", onResize);
+  }, [mobileOpen]);
+
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape" && mobileOpen) {
@@ -144,9 +157,9 @@ export default function HeroOptionB() {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-screen w-full overflow-hidden bg-[#0a0a0a]"
+      className="relative min-h-screen w-full overflow-hidden bg-[#0a0a0a] flex flex-col"
     >
-      {/* Backgrounds */}
+      {/* Background accents */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a0a] via-[#0a0a0a] to-red-950/30" />
       <div className="absolute -right-1/4 top-1/4 h-[150px] w-[150px] rounded-full bg-red-600/10 blur-[150px] md:h-[260px] md:w-[260px]" />
       <div className="absolute -left-1/4 bottom-1/4 h-[100px] w-[100px] rounded-full bg-red-600/5 blur-[100px] md:h-[180px] md:w-[180px]" />
@@ -159,10 +172,8 @@ export default function HeroOptionB() {
         }}
       />
 
-      {/* Navigation */}
-      <nav className="relative z-30 flex items-center justify-between px-4 py-4 md:px-16">
-        <div className="text-white/90 font-serif font-bold text-lg">YUNEX-X</div>
-
+      {/* Navigation (in normal flow) */}
+      <nav className="relative z-30 flex items-center justify-end md:justify-center p-2! md:px-16">
         <div className="hidden sm:flex h-16 items-center gap-8">
           {navLinks.map((link, index) => (
             <Link
@@ -184,7 +195,7 @@ export default function HeroOptionB() {
             aria-controls="mobile-menu"
             aria-expanded={mobileOpen}
             aria-label="Open menu"
-            className="inline-flex items-center justify-center rounded-md bg-white/6 p-2 text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="inline-flex items-center justify-center rounded-md bg-white/6 p-2! text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-red-500"
           >
             <svg
               className="h-10 w-10"
@@ -204,89 +215,101 @@ export default function HeroOptionB() {
         </div>
       </nav>
 
-      {/* Mobile backdrop */}
+      {/* Mobile backdrop (hidden on >= sm) */}
       <div
-        className={`fixed inset-0 z-20 bg-black/50 transition-opacity duration-300 ${
+        className={`fixed inset-0 z-20 bg-black/50 transition-opacity duration-300 sm:hidden ${
           mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
         onClick={() => setMobileOpen(false)}
         aria-hidden={!mobileOpen}
       />
 
-      {/* Mobile slide-out panel: now covers full viewport height when open */}
+      {/* Mobile panel (full screen on small screens). Hidden on >= sm */}
       <aside
         id="mobile-menu"
         role="dialog"
         aria-modal="true"
         aria-hidden={!mobileOpen}
-        className={`fixed top-0 right-0 z-30 h-screen w-full transform bg-[#0a0a0a] px-6 py-6 transition-transform duration-300 ease-in-out
-          ${mobileOpen ? "translate-x-0" : "translate-x-full"}
-          sm:relative sm:top-0 sm:right-0 sm:h-full sm:w-72 sm:translate-x-0`}
+        className={`fixed top-0 right-0 z-30 h-screen w-full transform bg-[#0a0a0a] transition-transform duration-300 ease-in-out sm:hidden
+          ${mobileOpen ? "translate-x-0" : "translate-x-full"}`}
       >
-        <div className="flex items-center justify-between p-4!">
-          <div className="text-white/90 font-serif font-bold text-2xl ">Menu</div>
-          <button
-            ref={closeButtonRef}
-            onClick={() => setMobileOpen(false)}
-            aria-label="Close menu"
-            className="rounded-md bg-white/6 p-2 text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-red-500"
-          >
-            <svg
-              className="h-10 w-10 "
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path
-                strokeWidth={2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-        </div>
-
-        {/* Make menu items vertically centered and take full height */}
-        <nav className="mt-8 flex h-[calc(100vh-84px)] flex-col items-center justify-center gap-6 sm:mt-4 sm:h-auto sm:justify-start">
-          {navLinks.map((link, index) => (
-            <Link
-              key={link.label}
-              href={link.href}
-              ref={index === 0 ? firstMobileLinkRef : undefined}
+        <div className="flex h-full flex-col">
+          <div className="flex items-center justify-end ">
+            <button
+              ref={closeButtonRef}
               onClick={() => setMobileOpen(false)}
-              className="rounded px-2 py-2 font-sans text-lg font-medium text-white/90 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-red-500"
+              aria-label="Close menu"
+              className="rounded-md bg-white/6 p-2! text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-red-500"
             >
-              {link.label}
-            </Link>
-          ))}
-
-          <div className="mt-6 sm:mt-4">
-            <Link
-              href="/contact"
-              onClick={() => setMobileOpen(false)}
-              className="inline-flex w-full items-center justify-center rounded-2xl bg-red-500 px-6 py-2 text-sm font-semibold text-white hover:bg-red-600"
-            >
-              Contact
-            </Link>
+              <svg
+                className="h-10 w-10"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
           </div>
 
-          {/* optional footer for mobile panel */}
-          <div className="mt-8 text-white/40 text-xs sm:hidden">© {new Date().getFullYear()} Yunex-x</div>
-        </nav>
+          <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6">
+            {navLinks.map((link, index) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                ref={index === 0 ? firstMobileLinkRef : undefined}
+                onClick={() => setMobileOpen(false)}
+                className="block w-full max-w-sm rounded px-2 py-3 text-center text-2xl font-semibold text-white/95 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-red-500"
+              >
+                {link.label}
+              </Link>
+            ))}
+
+            {/* Removed the extra red "Contact" button here as requested */}
+          </div>
+
+          <div className="px-6 py-4">
+            <div className="flex items-center justify-between text-sm text-white/40">
+              <div className="flex items-center gap-4">
+                <a
+                  href="https://github.com/Yunex-x"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-red-400"
+                >
+                  GitHub
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/younes-ma-2155233a2/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-red-400"
+                >
+                  LinkedIn
+                </a>
+              </div>
+              <div>© {new Date().getFullYear()}</div>
+            </div>
+          </div>
+        </div>
       </aside>
 
-      {/* Main Content */}
-      <div className="relative z-10 flex min-h-[calc(100vh-88px)] flex-col items-center justify-center gap-6 px-6 md:px-8">
-        <p className="mb-4 font-sans text-sm tracking-[0.3em] text-white/40 sm:text-lg">
+      {/* Main content: let it flex and fill the remaining space between nav and bottom bar */}
+      <main className="relative z-10 flex flex-1 flex-col items-center justify-center gap-4 px-6 py-6 md:px-8">
+        <p className="mb-2 font-sans text-xs tracking-[0.3em] text-white/40 sm:text-sm">
           HELLO, I'M
         </p>
 
         <h1
           ref={nameRef}
           className="overflow-hidden font-serif leading-none text-white"
-          style={{ fontSize: "clamp(2.75rem, 12vw, 7.5rem)" }}
+          style={{ fontSize: "clamp(2.25rem, 10.5vw, 6rem)" }}
         >
           {nameText.split("").map((char, index) => (
             <span key={index} className="char inline-block">
@@ -295,22 +318,22 @@ export default function HeroOptionB() {
           ))}
         </h1>
 
-        <div ref={roleRef} className="mt-4 overflow-hidden w-full max-w-2xl px-6">
-          <div className="flex items-center gap-4 justify-center">
-            <div className="h-px w-10 bg-red-500" />
+        <div ref={roleRef} className="mt-2 overflow-hidden w-full max-w-2xl px-4">
+          <div className="flex items-center gap-3 justify-center">
+            <div className="h-px w-8 bg-red-500" />
             <p
-              className="role-text font-sans text-lg font-light tracking-wide text-white/60 sm:text-2xl md:text-3xl"
+              className="role-text font-sans text-base font-light tracking-wide text-white/60 sm:text-xl md:text-2xl"
               aria-live="polite"
             >
               {roles[0]}
             </p>
-            <div className="h-px w-10 bg-red-500" />
+            <div className="h-px w-8 bg-red-500" />
           </div>
         </div>
 
         <p
           ref={taglineRef}
-          className="mt-6 max-w-xl text-center font-sans text-sm leading-relaxed text-white/30 sm:text-base md:text-lg"
+          className="mt-10! max-w-lg text-center font-sans text-sm leading-relaxed text-white/30 sm:text-base md:text-lg mb-20!"
         >
           Building modern, conversion-focused{" "}
           <span className="text-red-400">web experiences</span> with clean code
@@ -319,25 +342,25 @@ export default function HeroOptionB() {
 
         <div
           ref={ctaRef}
-          className="mt-8 flex w-full max-w-md flex-col items-center gap-3 sm:flex-row sm:gap-6"
+          className="flex w-full  justify-center flex-col items-center gap-6! sm:flex-row sm:gap-6!"
         >
           <Link
             href="/contact"
-            className="group relative inline-flex items-center justify-center overflow-hidden rounded-2xl bg-red-500 px-5 py-2 font-sans text-sm font-semibold text-white transition-all hover:bg-red-600"
+            className="group relative inline-flex items-center justify-center overflow-hidden rounded-2xl bg-red-500 px-5! py-2! font-sans text-sm font-semibold text-white transition-all hover:bg-red-600"
           >
             <span className="relative z-10">Contact Me</span>
           </Link>
           <Link
             href="/projects"
-            className="inline-flex items-center justify-center rounded-2xl border border-white/20 px-5 py-2 font-sans text-sm font-medium text-white/70 transition-all hover:border-red-500 hover:text-red-500"
+            className="inline-flex items-center justify-center rounded-2xl border border-white/20 px-5! py-2! font-sans text-sm font-medium text-white/70 transition-all hover:border-red-500 hover:text-red-500"
           >
             View Work
           </Link>
         </div>
-      </div>
+      </main>
 
-      {/* Bottom bar */}
-      <div className="absolute bottom-0 left-0 right-0 z-20 border-t border-white/5">
+      {/* Bottom bar (kept visually anchored) */}
+      <div className="absolute bottom-0 left-0 right-0 z-20 border-t border-white/5 bg-black/50">
         <div className="flex max-w-7xl items-center justify-between gap-6 px-4 py-3 mx-auto md:px-16">
           <div className="flex items-center gap-6">
             <span className="font-sans text-xs font-bold tracking-widest text-red-500">
@@ -363,8 +386,6 @@ export default function HeroOptionB() {
               </Link>
             </div>
           </div>
-
-          <div className="text-white/30 text-xs">© {new Date().getFullYear()} Yunex-x</div>
         </div>
       </div>
     </section>
