@@ -28,55 +28,38 @@ const projects: Project[] = [
         description:
             "A collection of pixel-perfect design–to–code UI examples built with Next.js + Tailwind CSS as part of my portfolio to showcase modern frontend skills.",
         tags: ["Next.js", "Tailwind", "Figma"],
-        liveUrl: "#",
-        githubUrl: "https://github.com/Yunex-x/checkout-forms",
+        liveUrl: "https://figma-to-ui-alpha.vercel.app/",
+        githubUrl: "https://github.com/Yunex-x/figma-to-ui/tree/main",
         snapshot: "/OIP.webp",
     },
     {
-        title: "Email Conversion Landing Page",
+        title: "Checkout Flow",
         description:
-            "A conversion-focused SaaS landing page built to collect early access email signups for a future product targeting freelancers and remote workers.",
-        tags: ["conversion", "landing page", "SaaS"],
-        liveUrl: "https://email-conversion-landing-page-tdwi.vercel.app",
-        githubUrl: "https://github.com/Yunex-x/flowsolo-SaaS-landing-page",
-        snapshot: "/snapshots/email-landing.png",
+            "Complete payment experience with multiple payment methods, order summary, and responsive design.",
+        tags: ["Checkout", "flow" , "E-commerce"],
+        liveUrl: "https://figma-to-ui-alpha.vercel.app/checkout",
+        githubUrl: "https://github.com/Yunex-x/figma-to-ui/tree/main/app/checkout",
+        snapshot: "/check.jpg",
     },
     {
-        title: "Conversion Landing Page",
+        title: "Auth Flow",
         description:
             "A modern, conversion-focused landing page built with Next.js App Router and Tailwind CSS, designed for service/agency websites that need to capture leads efficiently.",
         tags: ["Next.js", "Tailwind", "Portfolio"],
-        liveUrl: "https://optima-conversion-landing.vercel.app",
-        githubUrl: "https://github.com/Yunex-x/optima-conversion-landing",
-        snapshot: "/snapshots/optima-landing.png",
+        liveUrl: "https://figma-to-ui-alpha.vercel.app/auth/login",
+        githubUrl: "https://github.com/Yunex-x/figma-to-ui/tree/main/app/auth",
+        snapshot: "login.jpg",
     },
     {
-        title: "Components Library",
+        title: "Dashboard UI",
         description:
-            "Reusable UI components built with consistency, spacing system and dark theme.",
-        tags: ["Tailwind", "UI Kit", "Design"],
-        liveUrl: "#",
-        githubUrl: "https://github.com/Yunex-x",
-        snapshot: "/snapshots/components-library-1.png",
+            "   Analytics and admin dashboard with data visualization and modern UI components.",
+        tags: ["Tailwind", "UI Kit", ""],
+        liveUrl: "https://figma-to-ui-alpha.vercel.app/dashboard",
+        githubUrl: "https://github.com/Yunex-x/figma-to-ui/tree/main/app/dashboard",
+        snapshot: "/dashboard.jpg",
     },
-    {
-        title: "Components Library",
-        description:
-            "Reusable UI components built with consistency, spacing system and dark theme.",
-        tags: ["Tailwind", "UI Kit", "Design"],
-        liveUrl: "#",
-        githubUrl: "https://github.com/Yunex-x",
-        snapshot: "/snapshots/components-library-2.png",
-    },
-    {
-        title: "Components Library",
-        description:
-            "Reusable UI components built with consistency, spacing system and dark theme.",
-        tags: ["Tailwind", "UI Kit", "Design"],
-        liveUrl: "#",
-        githubUrl: "https://github.com/Yunex-x",
-        snapshot: "/snapshots/components-library-3.png",
-    },
+    
 ];
 
 export default function ProjectsPage() {
@@ -191,12 +174,9 @@ export default function ProjectsPage() {
                                 <img
                                     src={project.snapshot || "/snapshots/default.png"}
                                     alt={project.title + " snapshot"}
-                                    className="object-cover w-full h-full"
+                                    className="object-cover bg-center h-[176px] w-[361px] transition-transform duration-500 group-hover:scale-105"
                                 />
-                                {/* label */}
-                                <div className="absolute right-4 top-4 rounded-full border border-white/10 bg-black/40 px-3 py-1 font-sans text-[11px] text-white/60 backdrop-blur">
-                                    Snapshot
-                                </div>
+                               
                             </div>
 
                             <div className="p-6">
