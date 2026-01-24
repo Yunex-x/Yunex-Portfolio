@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import gsap from "gsap";
+import Navbar from "./components/Navbar";
 
 const navLinks = [
   { href: "/", label: "HOME" },
@@ -173,47 +174,7 @@ export default function HeroOptionB() {
       />
 
       {/* Navigation (in normal flow) */}
-      <nav className="relative z-30 flex items-center justify-end md:justify-center p-2! md:px-16">
-        <div className="hidden sm:flex h-16 items-center gap-8">
-          {navLinks.map((link, index) => (
-            <Link
-              key={link.label}
-              href={link.href}
-              className={`font-sans font-medium tracking-wider transition-colors ${
-                index === 0 ? "text-red-500" : "text-white/40 hover:text-white"
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
-
-        {/* Mobile: hamburger */}
-        <div className="sm:hidden">
-          <button
-            onClick={() => setMobileOpen(true)}
-            aria-controls="mobile-menu"
-            aria-expanded={mobileOpen}
-            aria-label="Open menu"
-            className="inline-flex items-center justify-center rounded-md bg-white/6 p-2! text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-red-500"
-          >
-            <svg
-              className="h-10 w-10"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path
-                strokeWidth={2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          </button>
-        </div>
-      </nav>
+     <Navbar/>
 
       {/* Mobile backdrop (hidden on >= sm) */}
       <div

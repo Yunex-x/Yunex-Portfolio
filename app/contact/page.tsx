@@ -1,8 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Mail, Github, Linkedin, ArrowUpRight } from "lucide-react";
+import gsap from "gsap";
+import Navbar from "../components/Navbar";
 
 const navLinks = [
     { href: "/", label: "Home" },
@@ -28,8 +30,69 @@ export default function ContactMeCard({
 
     const [menuOpen, setMenuOpen] = useState(false);
 
+    // GSAP refs
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    const headlineRef = useRef<HTMLHeadingElement | null>(null);
+    const subRef = useRef<HTMLDivElement | null>(null);
+    const taglineRef = useRef<HTMLParagraphElement | null>(null);
+    const ctaRef = useRef<HTMLDivElement | null>(null);
+
+    const headlineText = "CONTACT — ME";
+
+    useEffect(() => {
+        const ctx = gsap.context(() => {
+            const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
+
+            const headChars = headlineRef.current?.querySelectorAll(".char");
+            if (headChars && headChars.length) {
+                gsap.set(headChars, { y: 120, opacity: 0 });
+                tl.to(headChars, {
+                    y: 0,
+                    opacity: 1,
+                    duration: 1.2,
+                    stagger: 0.04,
+                });
+            }
+
+            tl.from(
+                subRef.current,
+                {
+                    y: 60,
+                    opacity: 0,
+                    duration: 1,
+                },
+                "-=0.6"
+            );
+
+            tl.from(
+                taglineRef.current,
+                {
+                    y: 40,
+                    opacity: 0,
+                    duration: 0.8,
+                },
+                "-=0.4"
+            );
+
+            tl.from(
+                ctaRef.current,
+                {
+                    y: 30,
+                    opacity: 0,
+                    duration: 0.8,
+                },
+                "-=0.4"
+            );
+        }, containerRef);
+
+        return () => ctx.revert();
+    }, []);
+
     return (
-        <main className="relative min-h-screen w-full overflow-hidden bg-black">
+        <main
+            ref={containerRef}
+            className="relative min-h-screen w-full overflow-hidden bg-black"
+        >
             {/* ✅ Background like home */}
             <div className="pointer-events-none absolute inset-0">
                 <div className="absolute inset-0 bg-[radial-gradient(60%_60%_at_50%_40%,rgba(255,255,255,0.06)_0%,rgba(0,0,0,0.95)_70%)]" />
@@ -38,101 +101,33 @@ export default function ContactMeCard({
             </div>
 
             {/* ✅ NAV (same uppercase + tracking + red active) */}
-            <nav className="relative z-20 mx-auto flex w-full max-w-6xl items-center justify-center px-6 pt-10">
-                {/* Mobile button */}
-                <button
-                    className="absolute right-4 top-10 md:hidden z-30 grid h-11 w-11 place-items-center rounded-full border border-white/10 bg-white/5 backdrop-blur"
-                    aria-label="Toggle menu"
-                    onClick={() => setMenuOpen((open) => !open)}
-                >
-                    {menuOpen ? (
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                            <line
-                                x1="6"
-                                y1="6"
-                                x2="18"
-                                y2="18"
-                                stroke="white"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                            />
-                            <line
-                                x1="6"
-                                y1="18"
-                                x2="18"
-                                y2="6"
-                                stroke="white"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                            />
-                        </svg>
-                    ) : (
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                            <rect x="4" y="7" width="16" height="2" rx="1" fill="white" />
-                            <rect x="4" y="11" width="16" height="2" rx="1" fill="white" />
-                            <rect x="4" y="15" width="16" height="2" rx="1" fill="white" />
-                        </svg>
-                    )}
-                </button>
-
-                {/* Desktop nav */}
-                <div className="hidden md:flex items-center gap-10">
-                    {navLinks.map((link) => {
-                        const isActive = link.href === "/contact";
-                        return (
-                            <Link
-                                key={link.label}
-                                href={link.href}
-                                className={`font-serif text-xs uppercase tracking-[0.35em] transition ${isActive ? "text-red-500" : "text-white/70 hover:text-white"
-                                    }`}
-                            >
-                                {link.label}
-                            </Link>
-                        );
-                    })}
-                </div>
-
-                {/* Mobile dropdown */}
-                {menuOpen && (
-                    <div className="absolute left-0 top-[88px] z-40 w-full border-t border-white/10 bg-black/95 py-8 backdrop-blur md:hidden">
-                        <div className="flex flex-col items-center gap-7">
-                            {navLinks.map((link) => {
-                                const isActive = link.href === "/contact";
-                                return (
-                                    <Link
-                                        key={link.label}
-                                        href={link.href}
-                                        onClick={() => setMenuOpen(false)}
-                                        className={`font-serif text-sm uppercase tracking-[0.35em] transition ${isActive ? "text-red-500" : "text-white/80 hover:text-white"
-                                            }`}
-                                    >
-                                        {link.label}
-                                    </Link>
-                                );
-                            })}
-                        </div>
-                    </div>
-                )}
-            </nav>
+            <Navbar />
 
             {/* ✅ Center section like home */}
             <section className="relative z-10 mx-auto flex min-h-[calc(100vh-120px)] w-full max-w-6xl items-center justify-center px-4 pb-14 pt-12">
                 <div className="w-full max-w-4xl">
-                    {/* Headline block (same hierarchy as home) */}
+                    {/* Headline block (animated) */}
                     <div className="text-center">
                         <p className="font-serif text-[11px] uppercase tracking-[0.45em] text-white/40">
                             LET’S TALK
                         </p>
 
-                        <h1 className="mt-4 font-serif text-5xl leading-[0.95] text-white sm:text-6xl md:text-7xl">
-                            CONTACT{" "}
-                            <span className="text-red-500" aria-hidden>
-                                —
-                            </span>{" "}
-                            ME
+                        <h1
+                            ref={headlineRef}
+                            className="mt-4 font-serif text-5xl leading-[0.95] text-white sm:text-6xl md:text-7xl overflow-hidden"
+                        >
+                            {headlineText.split("").map((char, i) => (
+                                <span
+                                    key={i}
+                                    className="char inline-block"
+                                    aria-hidden={char === " " ? "true" : undefined}
+                                >
+                                    {char}
+                                </span>
+                            ))}
                         </h1>
 
-                        <div className="mt-5 flex items-center justify-center gap-4">
+                        <div ref={subRef} className="mt-5 flex items-center justify-center gap-4">
                             <span className="h-px w-10 bg-red-500/70" />
                             <p className="font-sans text-sm text-white/60">
                                 Got an idea ? Let’s make it real.
@@ -142,22 +137,17 @@ export default function ContactMeCard({
                     </div>
 
                     {/* ✅ Card (same glass + spacing) */}
-                        {/* Top row */}
+                    <div className="mt-10">
+                        {/* Top row (empty slot if you want to add text/content) */}
                         <div className="flex flex-col gap-5 ">
-                            <div className="text-center gap-4 flex flex-col">
-                                
-
-                            </div>
-
-
+                            <div className="text-center gap-4 flex flex-col"></div>
                         </div>
 
                         {/* Divider */}
                         <div className="my-7  h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
                         {/* Buttons */}
-
-                        <div className="grid grid-cols-1 gap- w-50 mx-auto ">
+                        <div ref={ctaRef} className="grid grid-cols-1 gap-4 w-full max-w-xl mx-auto">
                             {/* Email */}
                             <a
                                 href={mailto}
@@ -221,6 +211,7 @@ export default function ContactMeCard({
                                 <ArrowUpRight className="h-5 w-5 text-white/40 transition group-hover:-translate-y-[2px] group-hover:translate-x-[4px] group-hover:text-white" />
                             </a>
                         </div>
+                    </div>
                 </div>
             </section>
         </main>

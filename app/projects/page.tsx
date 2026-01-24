@@ -1,8 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight, Github } from "lucide-react";
+import gsap from "gsap";
+import Navbar from "../components/Navbar";
 
 const navLinks = [
     { href: "/", label: "Home" },
@@ -17,33 +19,36 @@ type Project = {
     tags: string[];
     liveUrl?: string;
     githubUrl?: string;
+    snapshot?: string; // image url
 };
 
 const projects: Project[] = [
-
     {
-        title: "Dashboard UI",
+        title: "Figma designs to Next.js",
         description:
-            "Dark dashboard layout with sidebar, cards, sections and consistent spacing system.",
-        tags: ["Next.js", "Tailwind", "Dashboard"],
+            "A collection of pixel-perfect design–to–code UI examples built with Next.js + Tailwind CSS as part of my portfolio to showcase modern frontend skills.",
+        tags: ["Next.js", "Tailwind", "Figma"],
         liveUrl: "#",
         githubUrl: "https://github.com/Yunex-x/checkout-forms",
+        snapshot: "/OIP.webp",
     },
     {
-        title: "Landing Page UI",
+        title: "Email Conversion Landing Page",
         description:
-            "High-conversion landing page layout with clear hierarchy and premium feel.",
-        tags: ["Next.js", "Tailwind", "Marketing"],
-        liveUrl: "#",
-        githubUrl: "https://github.com/Yunex-x",
+            "A conversion-focused SaaS landing page built to collect early access email signups for a future product targeting freelancers and remote workers.",
+        tags: ["conversion", "landing page", "SaaS"],
+        liveUrl: "https://email-conversion-landing-page-tdwi.vercel.app",
+        githubUrl: "https://github.com/Yunex-x/flowsolo-SaaS-landing-page",
+        snapshot: "/snapshots/email-landing.png",
     },
     {
-        title: "Portfolio UI",
+        title: "Conversion Landing Page",
         description:
-            "Minimal portfolio with strong typography, smooth sections and clean details.",
+            "A modern, conversion-focused landing page built with Next.js App Router and Tailwind CSS, designed for service/agency websites that need to capture leads efficiently.",
         tags: ["Next.js", "Tailwind", "Portfolio"],
-        liveUrl: "#",
-        githubUrl: "https://github.com/Yunex-x",
+        liveUrl: "https://optima-conversion-landing.vercel.app",
+        githubUrl: "https://github.com/Yunex-x/optima-conversion-landing",
+        snapshot: "/snapshots/optima-landing.png",
     },
     {
         title: "Components Library",
@@ -52,30 +57,87 @@ const projects: Project[] = [
         tags: ["Tailwind", "UI Kit", "Design"],
         liveUrl: "#",
         githubUrl: "https://github.com/Yunex-x",
+        snapshot: "/snapshots/components-library-1.png",
     },
-      {
+    {
         title: "Components Library",
         description:
             "Reusable UI components built with consistency, spacing system and dark theme.",
         tags: ["Tailwind", "UI Kit", "Design"],
         liveUrl: "#",
         githubUrl: "https://github.com/Yunex-x",
+        snapshot: "/snapshots/components-library-2.png",
     },
-      {
+    {
         title: "Components Library",
         description:
             "Reusable UI components built with consistency, spacing system and dark theme.",
         tags: ["Tailwind", "UI Kit", "Design"],
         liveUrl: "#",
         githubUrl: "https://github.com/Yunex-x",
+        snapshot: "/snapshots/components-library-3.png",
     },
 ];
 
 export default function ProjectsPage() {
     const [menuOpen, setMenuOpen] = useState(false);
 
+    // GSAP refs
+    const containerRef = useRef<HTMLElement | null>(null);
+    const titleRef = useRef<HTMLHeadingElement | null>(null);
+    const subRef = useRef<HTMLDivElement | null>(null);
+    const gridRef = useRef<HTMLDivElement | null>(null);
+
+    const titleText = "PROJECTS";
+
+    useEffect(() => {
+        const ctx = gsap.context(() => {
+            const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
+
+            const chars = titleRef.current?.querySelectorAll(".char");
+            if (chars && chars.length) {
+                gsap.set(chars, { y: 120, opacity: 0 });
+                tl.to(chars, {
+                    y: 0,
+                    opacity: 1,
+                    duration: 1.2,
+                    stagger: 0.05,
+                });
+            }
+
+            tl.from(
+                subRef.current,
+                {
+                    y: 60,
+                    opacity: 0,
+                    duration: 0.9,
+                },
+                "-=0.6"
+            );
+
+            // Animate project cards with a stagger
+            const cards = gridRef.current?.querySelectorAll("article");
+            if (cards && cards.length) {
+                gsap.set(cards, { y: 20, opacity: 0 });
+                tl.to(
+                    cards,
+                    {
+                        y: 0,
+                        opacity: 1,
+                        duration: 0.8,
+                        stagger: 0.08,
+                        ease: "power2.out",
+                    },
+                    "-=0.4"
+                );
+            }
+        }, containerRef);
+
+        return () => ctx.revert();
+    }, []);
+
     return (
-        <main className="relative min-h-screen w-full overflow-hidden bg-black">
+        <main ref={containerRef} className="relative min-h-screen w-full overflow-hidden bg-black">
             {/* ✅ Background like Home */}
             <div className="pointer-events-none absolute inset-0">
                 <div className="absolute inset-0 bg-[radial-gradient(60%_60%_at_50%_40%,rgba(255,255,255,0.06)_0%,rgba(0,0,0,0.95)_70%)]" />
@@ -84,79 +146,7 @@ export default function ProjectsPage() {
             </div>
 
             {/* ✅ NAV */}
-            <nav className="relative z-20 mx-auto flex w-full max-w-6xl items-center justify-center px-6 pt-10">
-                <button
-                    className="absolute right-4 top-10 md:hidden z-30 grid h-11 w-11 place-items-center rounded-full border border-white/10 bg-white/5 backdrop-blur"
-                    aria-label="Toggle menu"
-                    onClick={() => setMenuOpen((open) => !open)}
-                >
-                    {menuOpen ? (
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                            <line
-                                x1="6"
-                                y1="6"
-                                x2="18"
-                                y2="18"
-                                stroke="white"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                            />
-                            <line
-                                x1="6"
-                                y1="18"
-                                x2="18"
-                                y2="6"
-                                stroke="white"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                            />
-                        </svg>
-                    ) : (
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                            <rect x="4" y="7" width="16" height="2" rx="1" fill="white" />
-                            <rect x="4" y="11" width="16" height="2" rx="1" fill="white" />
-                            <rect x="4" y="15" width="16" height="2" rx="1" fill="white" />
-                        </svg>
-                    )}
-                </button>
-
-                <div className="hidden md:flex items-center gap-10">
-                    {navLinks.map((link) => {
-                        const isActive = link.href === "/projects";
-                        return (
-                            <Link
-                                key={link.label}
-                                href={link.href}
-                                className={`font-serif text-xs uppercase tracking-[0.35em] transition ${isActive ? "text-red-500" : "text-white/70 hover:text-white"
-                                    }`}
-                            >
-                                {link.label}
-                            </Link>
-                        );
-                    })}
-                </div>
-
-                {menuOpen && (
-                    <div className="absolute left-0 top-[88px] z-40 w-full border-t border-white/10 bg-black/95 py-8 backdrop-blur md:hidden">
-                        <div className="flex flex-col items-center gap-7">
-                            {navLinks.map((link) => {
-                                const isActive = link.href === "/projects";
-                                return (
-                                    <Link
-                                        key={link.label}
-                                        href={link.href}
-                                        onClick={() => setMenuOpen(false)}
-                                        className={`font-serif text-sm uppercase tracking-[0.35em] transition ${isActive ? "text-red-500" : "text-white/80 hover:text-white"
-                                            }`}
-                                    >
-                                        {link.label}
-                                    </Link>
-                                );
-                            })}
-                        </div>
-                    </div>
-                )}
-            </nav>
+            <Navbar />
 
             {/* ✅ CONTENT */}
             <section className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center justify-center px-4 pb-16 pt-14">
@@ -166,14 +156,21 @@ export default function ProjectsPage() {
                         SELECTED WORK
                     </p>
 
-                    <h1 className="mt-4 font-serif text-5xl leading-[0.95] text-white sm:text-6xl md:text-7xl">
-                        PROJECTS{" "}
+                    <h1
+                        ref={titleRef}
+                        className="mt-4  font-serif text-5xl leading-[0.95] text-white sm:text-6xl md:text-7xl overflow-hidden"
+                    >
+                        {titleText.split("").map((char, i) => (
+                            <span key={i} className="char inline-block">
+                                {char}
+                            </span>
+                        ))}{" "}
                         <span className="text-red-500" aria-hidden>
                             —
                         </span>
                     </h1>
 
-                    <div className="mt-5 flex items-center justify-center gap-4">
+                    <div ref={subRef} className="mt-8 flex items-center justify-center  gap-4">
                         <span className="h-px w-10 bg-red-500/70" />
                         <p className="font-sans text-sm text-white/60">
                             Modern UI builds with clean spacing and premium detail.
@@ -183,22 +180,19 @@ export default function ProjectsPage() {
                 </div>
 
                 {/* ✅ 6 Cards */}
-                <div className="mt-12 grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                    {projects.map((project) => (
+                <div ref={gridRef} className="mt-12 grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {projects.map((project, idx) => (
                         <article
-                            key={project.title}
+                            key={project.title + '-' + idx}
                             className="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur transition hover:-translate-y-1 hover:border-white/15 hover:bg-white/7 hover:shadow-[0_40px_90px_-60px_rgba(0,0,0,0.95)]"
                         >
                             {/* Snapshot placeholder */}
                             <div className="relative h-44 w-full overflow-hidden border-b border-white/10 bg-white/5">
-                                {/* soft gradient */}
-                                <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 via-transparent to-white/5" />
-
-                                {/* fake highlights */}
-                                <div className="absolute left-4 top-4 h-3 w-20 rounded-full bg-white/10" />
-                                <div className="absolute left-4 top-10 h-2 w-28 rounded-full bg-white/8" />
-                                <div className="absolute bottom-4 left-4 h-8 w-24 rounded-xl bg-white/6" />
-
+                                <img
+                                    src={project.snapshot || "/snapshots/default.png"}
+                                    alt={project.title + " snapshot"}
+                                    className="object-cover w-full h-full"
+                                />
                                 {/* label */}
                                 <div className="absolute right-4 top-4 rounded-full border border-white/10 bg-black/40 px-3 py-1 font-sans text-[11px] text-white/60 backdrop-blur">
                                     Snapshot
@@ -235,7 +229,7 @@ export default function ProjectsPage() {
                                             rel="noopener noreferrer"
                                             className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 font-sans text-xs font-medium text-white/70 transition hover:border-white/15 hover:bg-white/10 hover:text-white"
                                         >
-                                            View
+                                            Live demo
                                             <ArrowUpRight className="h-4 w-4" />
                                         </a>
                                     )}
