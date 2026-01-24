@@ -11,7 +11,7 @@ export const SkillsHeader = forwardRef<HTMLDivElement, Props>(
     return (
       <div
         ref={ref}
-        className="mx-auto! mb-14! w-full max-w-4xl flex flex-col justify-center items-center mt-5!  md:mb-16! lg:mb-20!"
+        className="flex flex-col items-center justify-center text-center gap-6 "
       >
         <p className="mb-4 font-sans text-sm tracking-[0.3em] text-white/40">
           WHAT I DO

@@ -10,7 +10,8 @@ type Props = {
 
 export function SkillsGrid({ data, cardHeightClassName }: Props) {
   return (
-    <div className="mx-auto! mt-4! flex justify-center p-4! w-full max-w-4xl">
+    <div className="!mx-auto !mt-4 flex justify-center !p-4 w-full ">
+
       <div className="grid w-full gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {data.map((category, index) => (
           <SkillCard

@@ -10,7 +10,7 @@ export function SkillsFooterBar() {
           <span className="font-sans text-xs font-bold tracking-widest text-red-500">
             SOCIAL
           </span>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4!">
             <Link
               href="https://github.com/Yunes-x"
               target="_blank"
