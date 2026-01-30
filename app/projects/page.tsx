@@ -60,21 +60,19 @@ const projects: Project[] = [
         snapshot: "/dashboard.jpg",
     },
     {
-        title: "Dashboard kpi ",
+        title: "Dashboard KPI ",
         description:
             " A backend-ready KPI dashboard built with Next.js and Tailwind CSSClean UI, reusable components, separated logic (hooks & services), and prepared for easy backend integration .",
 tags: [
-  "Next.js",
-  "Tailwind CSS",
-  "Dashboard",
+  
   "KPI",
   "Frontend",
   "Backend-Ready",
   "UI Kit",
 ]  ,
-      liveUrl: "https://figma-to-ui-alpha.vercel.app/dashboard",
+      liveUrl: "https://dashboard-zeta-ten-72.vercel.app/overview",
         githubUrl: "https://github.com/Yunex-x/dashboard",
-        snapshot: "/dashboard.jpg",
+        snapshot: "/dash.jpeg",
     },
 ];
 
